@@ -64,7 +64,7 @@ with st.sidebar:
         strength = st.slider(t('偏好引导强度','Preference guidance strength'),0.,8.,3.,.5,key='strength')
     st.caption(t('对话及所选观影历史会由在线服务处理，用于生成推荐。',
                  'Your conversation and selected viewing history are processed by online services to generate recommendations.'))
-with st.expander(t('自定义推荐对照','Create your own comparison'), expanded=True):
+with st.expander(t('自定义推荐对照','Create your own comparison'), expanded=False):
     comparison_history = st.multiselect(t('这组对照的观影历史（按观看顺序选择）','Shared viewing history (in viewing order)'),
         options=list(engine.item2id), format_func=lambda i:engine.movie(i)['title'],
         max_selections=20, key='comparison_history')
@@ -110,8 +110,6 @@ with st.expander(t('自定义推荐对照','Create your own comparison'), expand
                         for n,m in enumerate(result['movies'],1): st.write(f"{n}. {m['title']}")
                     st.button(t('在下方继续对话','Continue chatting below'),key=f'continue_comparison_{index}',
                               on_click=continue_comparison,args=(index,),width='stretch')
-    st.caption(t('编辑内容和结果保留在当前会话中，不会更改其他访客的首页。',
-                 'Edits and results stay in your current session and do not change other visitors’ pages.'))
 if st.session_state.pop('pending_history',False):
     try:
         with st.spinner(t('正在根据观影历史生成推荐…','Generating recommendations from history…')):
