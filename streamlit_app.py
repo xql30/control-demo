@@ -1,5 +1,4 @@
 """Bilingual conversational movie demo."""
-import json
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -38,14 +37,18 @@ try:
 except Exception:
     st.error(t('推荐服务暂时未能加载，请稍后重试。','The recommender could not load. Please try again later.'))
     st.stop()
-showcase = json.loads((ROOT/'examples/showcase.json').read_text())
-def try_case(key):
+def continue_comparison(index):
+    record = st.session_state.comparison_results[index]
     reset_chat()
-    st.session_state.history = [m['id'] for m in showcase['history']]
-    st.session_state.active_history = list(st.session_state.history)
-    case = next(c for c in showcase['cases'] if c['key']==key)
-    if key == 'history': st.session_state.pending_history = True
-    else: st.session_state.prompt_input = case['prompt'][lang]
+    st.session_state.history = list(record['history'])
+    st.session_state.active_history = list(record['history'])
+    st.session_state.result = record['result']
+    if record['prompt']:
+        result = record['result']
+        st.session_state.messages = [
+            {'role':'user','content':record['prompt']},
+            {'role':'assistant','content':result['assistant_reply'],
+             'i18n':result['assistant_reply_i18n']}]
 def queue_history():
     reset_chat()
     st.session_state.pending_history = True
@@ -61,24 +64,54 @@ with st.sidebar:
         strength = st.slider(t('偏好引导强度','Preference guidance strength'),0.,8.,3.,.5,key='strength')
     st.caption(t('对话及所选观影历史会由在线服务处理，用于生成推荐。',
                  'Your conversation and selected viewing history are processed by online services to generate recommendations.'))
-with st.expander(t('同一观影历史，不同当前需求 · 看看示例','Same history, different needs · Explore examples'), expanded=True):
-    st.caption(t('已看过：','Previously watched: ')+' · '.join(m['title'] for m in showcase['history']))
-    for col, case in zip(st.columns(3), showcase['cases']):
+with st.expander(t('自定义推荐对照','Create your own comparison'), expanded=True):
+    comparison_history = st.multiselect(t('这组对照的观影历史（按观看顺序选择）','Shared viewing history (in viewing order)'),
+        options=list(engine.item2id), format_func=lambda i:engine.movie(i)['title'],
+        max_selections=20, key='comparison_history')
+    st.caption(t('填写不同需求并分别生成。需求留空时仅按历史推荐，各组互不累积。',
+                 'Enter different requests and generate each independently. Leave a request blank for history-only recommendations.'))
+    if 'comparison_results' not in st.session_state: st.session_state.comparison_results = {}
+    for index,col in enumerate(st.columns(3)):
         with col:
-            st.markdown('**'+case['prompt'][lang]+'**')
-            featured = case.get('featured_movie')
-            if case['key']=='history':
-                st.success(t('历史推荐首位：','Top history-based result: ')+case['movies'][0]['title'])
-                st.write(t('未添加当前需求；下方是仅依据观影历史生成的结果。','No current request was added. These results were generated from viewing history alone.'))
-            else:
-                if featured: st.success(t('本轮重点推荐：','Featured recommendation: ')+featured['title'])
-                with st.chat_message('assistant'): st.write(case['assistant_reply_i18n'][lang])
-            with st.expander(t('完整推荐列表','Full recommendation list')):
-                for n,m in enumerate(case['movies'],1): st.write(f"{n}. {m['title']}")
-            st.button(t('试试这个需求','Try this request') if case['key']!='history' else t('试试仅按历史推荐','Try history-only recommendations'),
-                      key='example_'+case['key'], on_click=try_case, args=(case['key'],), width='stretch')
-    st.caption(t('以上为同一历史下三次独立运行的实际记录；后两列包含当时返回的推荐回复。点击示例可继续体验，实时回复可能不同。',
-                 'Recorded outputs from three independent runs with the same history. The last two include the returned explanations. Try a request to continue; live responses may differ.'))
+            st.markdown('**'+t(f'需求 {index+1}',f'Request {index+1}')+'**')
+            request = st.text_area(t('当前想看什么？','What would you like to watch?'),
+                value='', max_chars=2000, key=f'comparison_prompt_{index}',
+                placeholder=t('自由填写；留空则仅根据历史推荐','Any request; leave blank to use history only'))
+            if st.button(t('生成推荐','Generate recommendations'),key=f'generate_comparison_{index}',
+                         disabled=not comparison_history, width='stretch'):
+                try:
+                    with st.spinner(t('正在生成…','Generating…')):
+                        if request.strip():
+                            result = engine.chat(comparison_history,[{'role':'user','content':request.strip()}],
+                                                 strength, preference_cache={}, language=lang)
+                        else:
+                            result = engine.history_only(comparison_history)
+                    st.session_state.comparison_results[index] = {
+                        'history':list(comparison_history),'prompt':request.strip(),
+                        'strength':strength,'result':result}
+                except Exception:
+                    st.error(t('本轮未完成，请稍后重试或调整需求。','Could not complete this request. Please retry or adjust it.'))
+            record = st.session_state.comparison_results.get(index)
+            if record:
+                stale = (record['history']!=comparison_history or record['prompt']!=request.strip()
+                         or record['strength']!=strength)
+                if stale:
+                    st.info(t('输入已修改，请重新生成以更新结果。','Inputs changed. Generate again to update the results.'))
+                else:
+                    result = record['result']
+                    featured = result.get('featured_movie')
+                    if result.get('history_only'):
+                        st.success(t('历史推荐首位：','Top history-based result: ')+result['movies'][0]['title'])
+                        st.caption(t('仅根据观影历史生成，未添加当前需求。','Generated from viewing history without a current request.'))
+                    else:
+                        if featured: st.success(t('本轮重点推荐：','Featured recommendation: ')+featured['title'])
+                        with st.chat_message('assistant'): st.write(result['assistant_reply_i18n'][lang])
+                    with st.expander(t('完整推荐列表','Full recommendation list')):
+                        for n,m in enumerate(result['movies'],1): st.write(f"{n}. {m['title']}")
+                    st.button(t('在下方继续对话','Continue chatting below'),key=f'continue_comparison_{index}',
+                              on_click=continue_comparison,args=(index,),width='stretch')
+    st.caption(t('编辑内容和结果保留在当前会话中，不会更改其他访客的首页。',
+                 'Edits and results stay in your current session and do not change other visitors’ pages.'))
 if st.session_state.pop('pending_history',False):
     try:
         with st.spinner(t('正在根据观影历史生成推荐…','Generating recommendations from history…')):
@@ -90,7 +123,7 @@ with left:
     st.subheader(t('和推荐助手聊聊','Chat with your recommender'))
     with st.container(height=420):
         if not st.session_state.messages:
-            st.info(t('选择一个示例，或直接说说当前需求。之后可以继续追加条件。','Choose an example or describe what you want to watch, then refine your request.'))
+            st.info(t('直接说说当前需求，或从上方对照结果继续对话。','Describe what you want to watch, or continue from a comparison above.'))
         for message in st.session_state.messages:
             with st.chat_message(message['role']): st.write(message.get('i18n',{}).get(lang,message['content']))
     prompt = st.chat_input(t('说说你现在想看什么…','What would you like to watch?'),max_chars=2000,key='prompt_input')

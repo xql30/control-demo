@@ -1,7 +1,7 @@
 # ControlRec Demo
 
 An interactive movie recommender with free-form conversational preference editing.
-The recommendation model runs on CPU. An OpenAI-compatible language-model API parses requests and explains generated recommendations. The bilingual interface keeps service configuration on the server. Recorded examples show actual recommendations and explanations for the same viewing history.
+The recommendation model runs on CPU. An OpenAI-compatible language-model API parses requests and explains generated recommendations. The bilingual interface keeps service configuration on the server. An editable comparison panel starts empty: choose shared viewing history, enter up to three requests, and generate each independently. Blank requests produce history-only recommendations. Results and bilingual explanations remain in the current session; any result can be continued in the chat.
 
 ## Streamlit Community Cloud
 
