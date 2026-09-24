@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.venv/
+assets/
+verification/
+__pycache__/
+*.pyc
+*.zip
