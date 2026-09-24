@@ -131,7 +131,7 @@ class MovieEngine:
                       free_text_control=os.environ.get('MOVIE_FREE_TEXT', '1') != '0')
         return result
 
-    def chat(self, history, messages, strength=3.0, llm=None, preference_cache=None):
+    def chat(self, history, messages, strength=3.0, llm=None, preference_cache=None, language='zh'):
         if any(i not in self.item2id for i in history) or len(history) > 20:
             raise ValueError('历史最多 20 部电影，必须来自当前目录。')
         if not messages or len(messages) > 24 or any(len(m['content']) > 2000 for m in messages):
@@ -148,5 +148,23 @@ class MovieEngine:
             result = self.recommend(history, state, strength)
             result['state'] = state
             from demo.recommendation_reply import explain_recommendation
-            result.update(explain_recommendation(context, history, messages, result))
+            result.update(explain_recommendation(context, history, messages, result, language=language))
             return dict(result, total_seconds=time.perf_counter()-start)
+
+    def history_only(self, history):
+        """Generate from history with both conversational control paths disabled."""
+        if any(i not in self.item2id for i in history) or len(history)>20:
+            raise ValueError('Invalid viewing history')
+        state={'intents':[{'text':'Movies matching the viewer interests','genres':[], 'probability':1.}],
+               'negative_intents':[], 'excluded_genres':[], 'exclusions':{}, 'unresolved':[]}
+        with self.lock:
+            start=time.perf_counter()
+            flags=(self.model.use_dialogue_multi_intent,self.model.use_dialogue_multi_intent_sid_guidance)
+            try:
+                self.model.use_dialogue_multi_intent=False
+                self.model.use_dialogue_multi_intent_sid_guidance=False
+                result=self.recommend(history,state,strength=0.)
+            finally:
+                self.model.use_dialogue_multi_intent,self.model.use_dialogue_multi_intent_sid_guidance=flags
+            result.update(state=state,total_seconds=time.perf_counter()-start,history_only=True)
+            return result

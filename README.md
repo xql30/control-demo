@@ -1,7 +1,7 @@
 # ControlRec Demo
 
 An interactive movie recommender with free-form conversational preference editing.
-The recommendation model runs on CPU. An OpenAI-compatible language-model API parses requests and explains generated recommendations. Visitors may supply their own endpoint, model, and API key in the sidebar.
+The recommendation model runs on CPU. An OpenAI-compatible language-model API parses requests and explains generated recommendations. The bilingual interface keeps service configuration on the server. Recorded examples show actual recommendations and explanations for the same viewing history.
 
 ## Streamlit Community Cloud
 
@@ -10,8 +10,8 @@ Connect a private GitHub repository to Streamlit Community Cloud. Set the entryp
 In **Advanced settings → Secrets**, configure:
 
 ```toml
-LLM_BASE_URL = "https://coding.dashscope.aliyuncs.com/v1"
-LLM_MODEL = "qwen3.5-plus"
+LLM_BASE_URL = "https://your-service.example/v1"
+LLM_MODEL = "your-model"
 LLM_API_KEY = "<server-side default key>"
 HF_TOKEN = "<read-only token for private assets>"
 ASSET_REPO_ID = "<private inference asset repository>"

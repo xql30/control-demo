@@ -1,0 +1,500 @@
+{
+  "history": [
+    {
+      "id": "119149",
+      "title": "Captain America: The First Avenger",
+      "genres": [
+        "action",
+        "adventure",
+        "sci-fi"
+      ]
+    },
+    {
+      "id": "99896",
+      "title": "Spider-Man (2002)",
+      "genres": [
+        "action",
+        "adventure",
+        "sci-fi"
+      ]
+    },
+    {
+      "id": "175165",
+      "title": "Kill Bill: Volume 1 (2003)",
+      "genres": [
+        "action",
+        "crime",
+        "drama"
+      ]
+    }
+  ],
+  "seed": 42,
+  "guidance_strength": 3.0,
+  "recorded_input_language": "zh",
+  "kind": "recorded_model_outputs",
+  "checkpoint_sha256": "de6ca4132fac345e2d6c2fbaadebc3677a11df02c5f3e16a8caf71d409d4a12b",
+  "cases": [
+    {
+      "key": "history",
+      "prompt": {
+        "zh": "不添加当前需求，仅根据观影历史推荐",
+        "en": "No current request: recommend from viewing history only"
+      },
+      "movies": [
+        {
+          "id": "78418",
+          "title": "The Avengers (2012)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -1.1445732116699219
+        },
+        {
+          "id": "204974",
+          "title": "Black Panther (2018)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -1.482365608215332
+        },
+        {
+          "id": "158006",
+          "title": "Captain America: Civil War (2016)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -2.503119468688965
+        },
+        {
+          "id": "169419",
+          "title": "Thor: Ragnarok (2017)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -2.9556031227111816
+        },
+        {
+          "id": "99583",
+          "title": "Iron Man (2008)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -2.9920380115509033
+        },
+        {
+          "id": "205163",
+          "title": "Avengers: Infinity War (2018)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -3.470529556274414
+        },
+        {
+          "id": "111429",
+          "title": "Guardians of the Galaxy Vol. 2 (2017)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -4.214017391204834
+        },
+        {
+          "id": "184098",
+          "title": "Guardians of the Galaxy (2014)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -4.249894142150879
+        },
+        {
+          "id": "108934",
+          "title": "Thor",
+          "genres": [
+            "action",
+            "adventure",
+            "fantasy"
+          ],
+          "violation": false,
+          "score": -4.45902681350708
+        },
+        {
+          "id": "78340",
+          "title": "Deadpool (2016)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -4.622591495513916
+        }
+      ],
+      "state": {
+        "intents": [
+          {
+            "text": "Movies matching the viewer interests",
+            "genres": [],
+            "probability": 1.0
+          }
+        ],
+        "negative_intents": [],
+        "excluded_genres": [],
+        "exclusions": {},
+        "unresolved": []
+      },
+      "history_only": true
+    },
+    {
+      "key": "comfort",
+      "prompt": {
+        "zh": "看腻了超英电影，想看一些治愈一点的。",
+        "en": "I'm tired of superhero movies and would like something more heartwarming."
+      },
+      "movies": [
+        {
+          "id": "111540",
+          "title": "Dunkirk (2017)",
+          "genres": [
+            "action",
+            "drama",
+            "history"
+          ],
+          "violation": false,
+          "score": -1.0370694398880005
+        },
+        {
+          "id": "78340",
+          "title": "Deadpool (2016)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -2.3100574016571045
+        },
+        {
+          "id": "119144",
+          "title": "Wonder Woman (2017)",
+          "genres": [
+            "action",
+            "adventure",
+            "fantasy"
+          ],
+          "violation": false,
+          "score": -3.3055315017700195
+        },
+        {
+          "id": "121422",
+          "title": "Life as We Know It (2010)",
+          "genres": [
+            "comedy",
+            "drama",
+            "romance"
+          ],
+          "violation": false,
+          "score": -3.5232176780700684
+        },
+        {
+          "id": "200523",
+          "title": "Ready Player One (2018)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -3.7205400466918945
+        },
+        {
+          "id": "186732",
+          "title": "The Crow (1994)",
+          "genres": [
+            "action",
+            "crime",
+            "drama"
+          ],
+          "violation": false,
+          "score": -4.168450832366943
+        },
+        {
+          "id": "184098",
+          "title": "Guardians of the Galaxy (2014)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -4.2619242668151855
+        },
+        {
+          "id": "204974",
+          "title": "Black Panther (2018)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -4.350858211517334
+        },
+        {
+          "id": "105589",
+          "title": "Annihilation (2018)",
+          "genres": [
+            "adventure",
+            "drama",
+            "horror"
+          ],
+          "violation": false,
+          "score": -4.567411422729492
+        },
+        {
+          "id": "88624",
+          "title": "Bride Wars (2009)",
+          "genres": [
+            "comedy",
+            "romance"
+          ],
+          "violation": false,
+          "score": -4.6298675537109375
+        }
+      ],
+      "state": {
+        "intents": [
+          {
+            "text": "heartwarming and comforting movies",
+            "genres": [],
+            "probability": 1.0
+          }
+        ],
+        "excluded_genres": [],
+        "exclusions": {
+          "superhero": "superhero"
+        },
+        "negative_intents": [
+          "superhero"
+        ],
+        "reply": "已记录本轮偏好修改。",
+        "unresolved": []
+      },
+      "history_only": false,
+      "featured_movie": {
+        "id": "121422",
+        "title": "Life as We Know It (2010)",
+        "genres": [
+          "comedy",
+          "drama",
+          "romance"
+        ],
+        "violation": false,
+        "score": -3.5232176780700684
+      },
+      "assistant_reply_i18n": {
+        "zh": "已根据您的观影历史和当前需求更新了这 10 部推荐。\n\n这一组里，更推荐《Life as We Know It (2010)》。这部电影属于喜剧和剧情类型，情节围绕照顾孤儿展开，符合用户寻求治愈系内容的需求。它完全避开了用户明确表示厌倦的超级英雄题材。",
+        "en": "Here are 10 recommendations based on your viewing history and current request.\n\nA pick from this list is Life as We Know It (2010). This film falls under comedy and drama genres, featuring a plot about caring for an orphan that aligns with the user's desire for heartwarming content. It completely avoids the superhero genre that the user explicitly stated they are tired of."
+      },
+      "reply_status": "generated",
+      "display_labels": {
+        "positive_labels_zh": [
+          "温馨治愈的电影"
+        ],
+        "negative_labels_zh": [
+          "超级英雄"
+        ]
+      }
+    },
+    {
+      "key": "meal",
+      "prompt": {
+        "zh": "想找一部吃饭时看的电影，轻松、容易跟上，别太血腥。",
+        "en": "I'd like a movie to watch while eating: light, easy to follow, and not too gory."
+      },
+      "movies": [
+        {
+          "id": "158006",
+          "title": "Captain America: Civil War (2016)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -1.495981691363168
+        },
+        {
+          "id": "204974",
+          "title": "Black Panther (2018)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -1.9445178489712003
+        },
+        {
+          "id": "169419",
+          "title": "Thor: Ragnarok (2017)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -3.1182765941646817
+        },
+        {
+          "id": "78418",
+          "title": "The Avengers (2012)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -3.2838411312130216
+        },
+        {
+          "id": "78340",
+          "title": "Deadpool (2016)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -3.7123527507808927
+        },
+        {
+          "id": "184098",
+          "title": "Guardians of the Galaxy (2014)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -3.821635005953622
+        },
+        {
+          "id": "111429",
+          "title": "Guardians of the Galaxy Vol. 2 (2017)",
+          "genres": [
+            "action",
+            "adventure",
+            "comedy"
+          ],
+          "violation": false,
+          "score": -3.8554539661434415
+        },
+        {
+          "id": "108934",
+          "title": "Thor",
+          "genres": [
+            "action",
+            "adventure",
+            "fantasy"
+          ],
+          "violation": false,
+          "score": -4.014542339327646
+        },
+        {
+          "id": "99583",
+          "title": "Iron Man (2008)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -4.0271763782528165
+        },
+        {
+          "id": "148231",
+          "title": "Jurassic Park (1993)",
+          "genres": [
+            "action",
+            "adventure",
+            "sci-fi"
+          ],
+          "violation": false,
+          "score": -4.0549168567684415
+        }
+      ],
+      "state": {
+        "intents": [
+          {
+            "text": "easy to follow movies",
+            "genres": [],
+            "probability": 0.5
+          },
+          {
+            "text": "light-hearted movies",
+            "genres": [],
+            "probability": 0.5
+          }
+        ],
+        "excluded_genres": [],
+        "exclusions": {
+          "gory": "gory"
+        },
+        "negative_intents": [
+          "gory"
+        ],
+        "reply": "已记录本轮偏好修改。",
+        "unresolved": []
+      },
+      "history_only": false,
+      "featured_movie": {
+        "id": "184098",
+        "title": "Guardians of the Galaxy (2014)",
+        "genres": [
+          "action",
+          "adventure",
+          "comedy"
+        ],
+        "violation": false,
+        "score": -3.821635005953622
+      },
+      "assistant_reply_i18n": {
+        "zh": "已根据您的观影历史和当前需求更新了这 10 部推荐。\n\n这一组里，更推荐《Guardians of the Galaxy (2014)》。这部电影风格幽默轻松，剧情简单易懂，非常适合用餐时观看。它避免了过度血腥的画面，符合您对观影体验的要求。",
+        "en": "Here are 10 recommendations based on your viewing history and current request.\n\nA pick from this list is Guardians of the Galaxy (2014). The movie features a humorous and lighthearted tone with a straightforward plot, making it ideal for watching while eating. It avoids excessive gore, aligning well with your viewing preferences."
+      },
+      "reply_status": "generated",
+      "display_labels": {
+        "positive_labels_zh": [
+          "容易跟上的电影",
+          "轻松愉快的电影"
+        ],
+        "negative_labels_zh": [
+          "血腥"
+        ]
+      }
+    }
+  ]
+}

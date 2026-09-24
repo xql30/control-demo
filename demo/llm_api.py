@@ -26,8 +26,8 @@ def validate_custom_endpoint(url):
 
 class ChatAPI:
     def __init__(self,base_url=None,model=None,key=None,custom=False):
-        self.base_url=(base_url if base_url is not None else os.getenv('LLM_BASE_URL','https://coding.dashscope.aliyuncs.com/v1')).rstrip('/')
-        self.model=model if model is not None else os.getenv('LLM_MODEL','qwen3.5-plus')
+        self.base_url=(base_url if base_url is not None else os.getenv('LLM_BASE_URL','')).rstrip('/')
+        self.model=model if model is not None else os.getenv('LLM_MODEL','')
         self.key=key if key is not None else os.getenv('LLM_API_KEY','')
         self.custom=custom
         self.timeout=float(os.getenv('LLM_TIMEOUT','60'))
@@ -36,7 +36,7 @@ class ChatAPI:
             validate_custom_endpoint(self.base_url)
 
     def complete(self,messages,max_tokens=600):
-        if not self.key: raise LLMError('默认 API 尚未配置，可在侧栏使用自己的 API。')
+        if not self.key or not self.base_url or not self.model: raise LLMError('Service is not configured.')
         if self.custom: validate_custom_endpoint(self.base_url)
         payload={'model':self.model,'messages':messages,'temperature':0,'max_tokens':max_tokens,'stream':False}
         hostname=urlsplit(self.base_url).hostname or ''
