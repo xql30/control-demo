@@ -8,6 +8,7 @@ for name, value in [('DEVICE','cpu'),('OMP_NUM_THREADS','2'),('MKL_NUM_THREADS',
     os.environ.setdefault(name, value)
 import streamlit as st
 import pandas as pd
+from demo.conversation import handle_turn
 st.set_page_config(page_title='ControlRec Demo', page_icon='🎬', layout='wide',
                    menu_items={'Get Help':None,'Report a bug':None,'About':None})
 try:
@@ -91,6 +92,7 @@ with st.expander(t('自定义推荐对照','Create your own comparison'), expand
                         if request.strip():
                             result = engine.chat(comparison_history,[{'role':'user','content':request.strip()}],
                                                  strength, preference_cache={}, language=lang)
+                            result['preference_messages'] = [{'role':'user','content':request.strip()}]
                         else:
                             result = engine.history_only(comparison_history)
                     st.session_state.comparison_results[index] = {
@@ -138,15 +140,16 @@ with left:
             st.error(t('本次对话已达到 12 轮，请重置后继续。','This conversation has reached 12 turns. Reset to continue.'))
         else:
             try:
-                with st.spinner(t('正在理解需求并生成推荐…','Understanding your request and generating recommendations…')):
-                    result = engine.chat(selected,[{'role':m['role'],'content':m['content']} for m in messages],strength,
-                        preference_cache=st.session_state.preference_cache,language=lang)
-                st.session_state.previous = [m['id'] for m in (st.session_state.result or {}).get('movies',[])]
+                with st.spinner(t('正在处理您的消息…','Responding to your message…')):
+                    result = handle_turn(engine,selected,messages,previous_result=st.session_state.result,
+                        strength=strength,preference_cache=st.session_state.preference_cache,language=lang)
                 st.session_state.messages = messages+[{'role':'assistant','content':result['assistant_reply'],'i18n':result['assistant_reply_i18n']}]
-                st.session_state.result = result
+                if result['response_type'] == 'recommendation':
+                    st.session_state.previous = [m['id'] for m in (st.session_state.result or {}).get('movies',[])]
+                    st.session_state.result = result
                 st.rerun()
             except Exception:
-                st.error(t('本轮推荐未完成，请稍后重试或调整需求。','This request could not be completed. Please retry or adjust your request.'))
+                st.error(t('本轮回复未完成，请稍后重试。','Could not respond to this message. Please retry.'))
 with right:
     st.subheader(t('为你生成的推荐','Your recommendations'))
     result = st.session_state.result
