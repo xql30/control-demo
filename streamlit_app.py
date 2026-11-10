@@ -19,6 +19,13 @@ with st.sidebar:
     language = st.selectbox('语言 / Language', ['中文','English'], key='language')
 lang = 'zh' if language == '中文' else 'en'
 def t(zh, en): return zh if lang == 'zh' else en
+def show_featured(result):
+    featured = result.get('featured_movie')
+    if not featured: return
+    if result.get('match_level') == 'partial':
+        st.info(t('部分符合需求：','Partial match: ')+featured['title'])
+    else:
+        st.success(t('本轮重点推荐：','Featured recommendation: ')+featured['title'])
 @st.cache_resource(show_spinner=False)
 def load_engine():
     import torch
@@ -104,7 +111,7 @@ with st.expander(t('自定义推荐对照','Create your own comparison'), expand
                         st.success(t('历史推荐首位：','Top history-based result: ')+result['movies'][0]['title'])
                         st.caption(t('仅根据观影历史生成，未添加当前需求。','Generated from viewing history without a current request.'))
                     else:
-                        if featured: st.success(t('本轮重点推荐：','Featured recommendation: ')+featured['title'])
+                        show_featured(result)
                         with st.chat_message('assistant'): st.write(result['assistant_reply_i18n'][lang])
                     with st.expander(t('完整推荐列表','Full recommendation list')):
                         for n,m in enumerate(result['movies'],1): st.write(f"{n}. {m['title']}")
@@ -147,7 +154,7 @@ with right:
         tabs = st.tabs([t('推荐列表','Recommendations'),t('当前偏好','Current preferences')])
         with tabs[0]:
             featured = result.get('featured_movie')
-            if featured: st.success(t('本轮重点推荐：','Featured recommendation: ')+featured['title'])
+            show_featured(result)
             if result.get('history_only'): st.caption(t('仅根据观影历史生成，未添加当前需求。','Generated from viewing history with no current request.'))
             rows = []
             for n,m in enumerate(result['movies'],1):
